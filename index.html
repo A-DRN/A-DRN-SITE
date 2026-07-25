@@ -41,7 +41,9 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: auto; }
   body {
-    background: var(--deep);
+    /* near-black, NOT --deep: iOS Safari's translucent bars blur the page bg
+       through the film's gap spacers, and navy read as a wrong blue banner */
+    background: var(--night);
     color: var(--cream);
     font-family: 'Instrument Sans', sans-serif;
     font-size: 16px;
