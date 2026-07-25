@@ -1,5 +1,7 @@
 *
 !.gitignore
+!.github/
+!.github/**
 !index.html
 !assets/
 !assets/**
