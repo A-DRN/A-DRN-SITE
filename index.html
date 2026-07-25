@@ -144,7 +144,10 @@
   .film { position: relative; }
   .chapter {
     position: sticky; top: 0;
-    height: 100vh; height: 100dvh;
+    /* large-viewport units on purpose: dvh resizes every time the mobile
+       browser bars show/hide, which both exposed the page bg behind
+       Safari's bottom bar and re-measured the film mid-scroll (jank) */
+    height: 100vh; height: 100lvh;
     overflow: hidden;
   }
   .chapter .shot {
@@ -580,6 +583,8 @@
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  // mobile browser bars firing resize on show/hide must not re-measure the film
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
   const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
