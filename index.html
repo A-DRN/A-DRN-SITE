@@ -50,6 +50,33 @@
 
   .serif { font-family: 'Big Shoulders', sans-serif; }
 
+  /* ---------- loading screen ---------- */
+  .loader {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--deep);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 24px;
+    transition: opacity .7s ease, visibility .7s;
+  }
+  .loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-mark {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 600; font-size: 20px;
+    letter-spacing: .14em; color: var(--cream);
+  }
+  .loader-track {
+    width: min(220px, 56vw); height: 1px;
+    background: var(--hairline); overflow: hidden;
+  }
+  .loader-fill {
+    display: block; height: 100%; width: 100%;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+  }
+  .loader-pct {
+    font-size: 12px; font-weight: 600; letter-spacing: .3em; text-indent: .3em;
+    color: var(--gold); font-variant-numeric: tabular-nums;
+  }
+
   /* ---------- top bar ---------- */
   /* plain header: sits on the hero, scrolls away with it (Stewco style) */
   .topbar {
@@ -325,6 +352,71 @@
 </head>
 <body>
 
+<div class="loader" id="loader" aria-hidden="true">
+  <span class="loader-mark">DJ ADRIÁN</span>
+  <span class="loader-track"><span class="loader-fill" id="loaderFill"></span></span>
+  <span class="loader-pct" id="loaderPct">0%</span>
+</div>
+<noscript><style>.loader { display: none; }</style></noscript>
+<script>
+/* loading screen: counts the real assets (4 film shots + about photo + 2 fonts)
+   from 0 to 100, then fades into the hero. Skipped for reduced-motion, no-JS,
+   and the ?jump= dev contract. Fail-safe completes it at 7s no matter what. */
+(function () {
+  var loader = document.getElementById('loader');
+  var fill = document.getElementById('loaderFill');
+  var pct = document.getElementById('loaderPct');
+  var resolveDone;
+  window.__loaderDone = new Promise(function (r) { resolveDone = r; });
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || new URLSearchParams(location.search).has('jump')) {
+    loader.style.display = 'none';
+    resolveDone();
+    return;
+  }
+
+  var assets = ['assets/img/ch1.jpg', 'assets/img/ch2.jpg', 'assets/img/ch3.jpg',
+                'assets/img/ch4.jpg', 'assets/img/about.jpg'];
+  var total = assets.length + 2;
+  var loaded = 0;
+  function tick() { loaded++; }
+  assets.forEach(function (src) {
+    var img = new Image();
+    img.onload = tick; img.onerror = tick;
+    img.src = src;
+  });
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('800 1em "Big Shoulders"').then(tick, tick);
+    document.fonts.load('400 1em "Instrument Sans"').then(tick, tick);
+  } else { loaded += 2; }
+
+  var start = performance.now();
+  var minTime = 1000; /* cached loads still get a visible 0-to-100 sweep */
+  var maxTime = 7000;
+  var shown = 0;
+  function frame(now) {
+    var elapsed = now - start;
+    var real = elapsed > maxTime ? 1 : loaded / total;
+    var cap = Math.min(1, elapsed / minTime);
+    var target = Math.min(real, cap) * 100;
+    shown += (target - shown) * 0.12;
+    if (target >= 100 && shown > 99.2) shown = 100;
+    pct.textContent = Math.round(shown) + '%';
+    fill.style.transform = 'scaleX(' + (shown / 100) + ')';
+    if (shown >= 100) {
+      loader.classList.add('done');
+      /* hand off to the intro a beat into the fade, clear the DOM after it */
+      setTimeout(resolveDone, 300);
+      setTimeout(function () { loader.remove(); }, 800);
+    } else {
+      requestAnimationFrame(frame);
+    }
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
 <header class="topbar" id="topbar">
   <a class="wordmark" href="#">DJ ADRIÁN</a>
   <nav class="nav-right">
@@ -505,6 +597,15 @@
   nameEl.innerHTML = nameEl.textContent.trim().split('').map(c =>
     c === ' ' ? '<span class="ch">&nbsp;</span>' : `<span class="ch">${c}</span>`).join('');
 
+  if (jump === null) {
+    // pre-hide the intro cast so nothing flashes while the loader fades away,
+    // and hold scroll until the loader hands off
+    gsap.set('#openerName .ch', { yPercent: 120 });
+    gsap.set(['.opener-sub', '.opener-line', '#topbar'], { opacity: 0 });
+    lenis.stop();
+    (window.__loaderDone || Promise.resolve()).then(() => lenis.start());
+  }
+
   // split phrases into masked words
   document.querySelectorAll('[data-split]').forEach(el => {
     el.innerHTML = el.textContent.trim().split(/\s+/).map(w =>
@@ -590,8 +691,11 @@
       ScrollTrigger.update();
       setReady();
     } else {
-      playIntro();
-      setReady();
+      // wait for the loading screen to finish its 0-100 sweep, then raise the curtain
+      (window.__loaderDone || Promise.resolve()).then(() => {
+        playIntro();
+        setReady();
+      });
     }
   });
 })();
