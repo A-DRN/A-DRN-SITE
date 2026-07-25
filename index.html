@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DJ ADRIÁN · Any Party, Any Sound</title>
+<meta name="description" content="DJ Adrián. House parties, sunset sets and private events. Based in Miami, happy to travel. Any genre, any crowd. English y español. Message him on WhatsApp.">
+<meta property="og:title" content="DJ ADRIÁN · Any Party, Any Sound">
+<meta property="og:description" content="DJ for any party, anywhere. Any genre, English y español. Message him on WhatsApp.">
+<meta property="og:image" content="assets/img/ch1.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='%23F6B95B' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23F6B95B'/%3E%3C/svg%3E">
+<style>
+  @font-face {
+    font-family: 'Big Shoulders';
+    src: url('assets/fonts/big-shoulders.woff2') format('woff2');
+    font-weight: 500 900; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Instrument Sans';
+    src: url('assets/fonts/instrument-sans.woff2') format('woff2');
+    font-weight: 400 700; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --cream: #FFF1DC;
+    --gold: #F6B95B;
+    --ember: #E8892B;
+    --coral: #E05A3A;
+    --night: #101010;
+    --deep: #0D0A1B;
+    --dusk: #171130;
+    --muted: rgba(255,241,220,.6);
+    --hairline: rgba(255,241,220,.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--gold); color: var(--night); }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+
+  .serif { font-family: 'Big Shoulders', sans-serif; }
+
+  /* ---------- top bar ---------- */
+  /* plain header: sits on the hero, scrolls away with it (Stewco style) */
+  .topbar {
+    position: absolute; inset: 0 0 auto 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px clamp(18px, 4vw, 44px);
+  }
+  /* floating WhatsApp bubble: fades into the corner once the film starts,
+     bows out at the endcap where the big button takes over */
+  .btn-book.fab {
+    position: fixed; right: clamp(18px, 4vw, 44px); bottom: 22px; z-index: 60;
+    opacity: 0; visibility: hidden; transform: translateY(10px);
+    transition: opacity .35s ease, visibility .35s, transform .35s ease;
+  }
+  .fab.on { opacity: 1; visibility: visible; transform: translateY(0); }
+  .fab.on:hover { transform: translateY(0) scale(1.045); }
+  .wordmark {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 600; font-size: 20px;
+    letter-spacing: .14em; text-decoration: none; color: var(--cream);
+    text-shadow: 0 1px 12px rgba(13,10,27,.5);
+  }
+  .nav-right { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 34px); }
+  .nav-link {
+    font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 13px;
+    letter-spacing: .16em; text-transform: uppercase; text-decoration: none;
+    color: rgba(255,241,220,.85); transition: color .25s ease;
+    text-shadow: 0 1px 10px rgba(13,10,27,.5);
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .nav-link:hover { color: var(--ember); }
+  .nav-link svg { width: 14px; height: 14px; flex: none; }
+  .nav-link .call-label { display: inline; }
+  @media (max-width: 700px) {
+    .nav-text { display: none; }
+    .nav-link .call-label { display: none; }
+    .nav-link svg { width: 17px; height: 17px; }
+  }
+  .btn-book {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: 'Instrument Sans', sans-serif; font-weight: 600; font-size: 14px;
+    letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
+    color: var(--cream); background: var(--coral);
+    padding: 11px 20px; border-radius: 99px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 0 22px rgba(224,90,58,.4);
+    transition: transform .25s ease;
+  }
+  .btn-book:hover { transform: scale(1.045); }
+  .btn-book svg { width: 16px; height: 16px; flex: none; }
+  /* shine sweep: allowed on the WhatsApp button only */
+  .btn-book::after {
+    content: ''; position: absolute; top: -40%; bottom: -40%; left: -70%; width: 42%;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,.55), transparent);
+    transform: skewX(-18deg);
+    animation: shine 4.2s ease-in-out infinite;
+  }
+  @keyframes shine { 0%, 72% { left: -70%; } 92%, 100% { left: 140%; } }
+
+  /* ---------- the film ---------- */
+  .film { position: relative; }
+  .chapter {
+    position: sticky; top: 0;
+    height: 100vh; height: 100dvh;
+    overflow: hidden;
+  }
+  .chapter .shot {
+    position: absolute; inset: -6% 0;
+    background-size: cover; background-position: center;
+    will-change: transform;
+  }
+  #shot1 { background-image: url('assets/img/ch1.jpg'); }
+  #shot2 { background-image: url('assets/img/ch2.jpg'); }
+  #shot3 { background-image: url('assets/img/ch3.jpg'); }
+  #shot4 { background-image: url('assets/img/ch4.jpg'); }
+  .chapter .tint {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,10,27,.42), rgba(13,10,27,0) 45%);
+  }
+  .gap { height: 70vh; }
+  .gap-last { height: 55vh; }
+  #ch1 { z-index: 1; } #ch2 { z-index: 2; } #ch3 { z-index: 3; } #ch4 { z-index: 4; }
+
+  /* chapter 1: the opener */
+  .opener-content {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 0 16px;
+    will-change: transform, opacity;
+  }
+  .opener-name {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: clamp(64px, 15vw, 220px);
+    line-height: .95; letter-spacing: .02em;
+    color: var(--cream);
+    text-shadow: 0 4px 60px rgba(13,10,27,.45);
+  }
+  .opener-name .ch { display: inline-block; will-change: transform; }
+  .opener-sub {
+    margin-top: 18px;
+    font-size: clamp(14px, 1.6vw, 20px); font-weight: 500;
+    letter-spacing: .32em; text-indent: .32em; text-transform: uppercase;
+    color: var(--cream);
+    text-shadow: 0 2px 20px rgba(13,10,27,.6);
+  }
+  .opener-line {
+    margin-top: 14px; max-width: 520px;
+    font-size: clamp(15px, 1.5vw, 18px); line-height: 1.55;
+    color: rgba(255,241,220,.92);
+    text-shadow: 0 2px 18px rgba(13,10,27,.6);
+    text-wrap: pretty;
+  }
+
+  /* chapters 2-4: phrase over photo */
+  .phrase-wrap {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    text-align: center; padding: 0 16px 16vh;
+  }
+  .slate {
+    font-size: 11px; font-weight: 600; letter-spacing: .38em; text-indent: .38em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  }
+  .phrase {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: clamp(44px, 8.6vw, 128px); line-height: 1.02;
+    letter-spacing: .01em; color: var(--cream);
+    text-shadow: 0 2px 34px rgba(13,10,27,.4);
+  }
+  .phrase .w { display: inline-block; overflow: hidden; vertical-align: top; }
+  .phrase .w > span { display: inline-block; will-change: transform; }
+
+  /* ---------- after the film ---------- */
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .38em; text-indent: .38em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 26px;
+  }
+
+  .about {
+    position: relative; z-index: 10;
+    background: linear-gradient(to bottom, #131024, var(--dusk));
+    padding: clamp(90px, 14vh, 150px) clamp(20px, 6vw, 80px);
+  }
+  .about-grid {
+    max-width: 1160px; margin: 0 auto;
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(36px, 6vw, 90px); align-items: center;
+  }
+  .about-photo { overflow: hidden; border-radius: 4px; }
+  .about-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; will-change: transform; }
+  .about-title {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: clamp(34px, 4.6vw, 62px); line-height: 1.06; margin-bottom: 26px;
+  }
+  .about-title em { font-style: normal; color: var(--gold); }
+  .about-text { max-width: 52ch; color: var(--muted); font-size: clamp(16px, 1.35vw, 18px); }
+  .about-text strong { color: var(--cream); font-weight: 600; }
+
+  .sets {
+    position: relative; z-index: 10;
+    background: linear-gradient(to bottom, var(--dusk), var(--deep));
+    padding: clamp(90px, 14vh, 150px) clamp(20px, 6vw, 80px);
+  }
+  .sets-inner { max-width: 1160px; margin: 0 auto; }
+  .sets-head {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: clamp(34px, 4.6vw, 62px); line-height: 1.06; margin-bottom: clamp(40px, 6vh, 64px);
+  }
+  .sets-head em { font-style: normal; color: var(--gold); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 2vw, 24px); }
+  .card {
+    display: flex; flex-direction: column;
+    border: 1px solid var(--hairline); border-radius: 6px;
+    padding: clamp(26px, 3vw, 40px) clamp(22px, 2.4vw, 34px);
+    background: rgba(255,241,220,.025);
+    transition: transform .3s ease, border-color .3s ease;
+  }
+  .card:hover { transform: scale(1.02); border-color: rgba(246,185,91,.45); }
+  .card h3 {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: clamp(24px, 2.2vw, 31px); line-height: 1.1; margin-bottom: 14px;
+  }
+  .card p { color: var(--muted); font-size: 15.5px; }
+  .card .tag {
+    display: inline-block; margin-top: auto; padding-top: 22px;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .28em; text-indent: .28em;
+    text-transform: uppercase; color: var(--gold);
+  }
+
+  /* watch-a-set link under the cards */
+  .watch-set {
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-top: clamp(30px, 5vh, 48px);
+    padding: 13px 28px 13px 15px;
+    border: 1px solid var(--hairline); border-radius: 99px;
+    text-decoration: none;
+    transition: transform .3s ease, border-color .3s ease;
+  }
+  .watch-set:hover { transform: scale(1.02); border-color: rgba(246,185,91,.45); }
+  .watch-play {
+    width: 46px; height: 46px; border-radius: 50%; flex: none;
+    background: var(--gold); color: var(--night);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .watch-play svg { width: 20px; height: 20px; margin-left: 3px; }
+  .watch-text { display: flex; flex-direction: column; gap: 3px; text-align: left; }
+  .watch-title {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: 21px; line-height: 1; letter-spacing: .02em; color: var(--cream);
+  }
+  .watch-sub {
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* endcap = finale + footer sharing one Grainient backdrop
+     (component-library port): 2 of 3 colors = the section bg so only a
+     quiet ember drift shows. Solid --deep stays as fallback. */
+  .endcap { position: relative; z-index: 10; background: var(--deep); overflow: hidden; }
+  .finale-bg {
+    position: absolute; inset: 0; z-index: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%);
+    mask-image: linear-gradient(to bottom, transparent, #000 22%);
+  }
+  .finale-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .endcap > :not(.finale-bg) { position: relative; z-index: 1; }
+  .finale {
+    min-height: 92vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: clamp(90px, 12vh, 140px) 20px;
+  }
+  .finale-head {
+    font-family: 'Big Shoulders', sans-serif; font-weight: 800;
+    font-size: clamp(46px, 9vw, 138px); line-height: 1.02; letter-spacing: .005em;
+    max-width: 11ch;
+  }
+  .finale-sub { margin-top: 26px; color: var(--muted); font-size: clamp(15px, 1.4vw, 18px); }
+  .finale-alt { margin-top: 22px; font-size: 14px; letter-spacing: .02em; color: var(--muted); }
+  .finale-alt a { color: var(--gold); text-decoration: none; }
+  .finale-alt a:hover { color: var(--ember); }
+  .btn-finale {
+    margin-top: 44px; font-size: 16px; padding: 18px 34px; gap: 12px;
+    box-shadow: 0 0 44px rgba(224,90,58,.45);
+  }
+  .btn-finale svg { width: 20px; height: 20px; }
+
+  footer {
+    border-top: 1px solid rgba(255,241,220,.08);
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+    padding: 22px clamp(20px, 4vw, 44px);
+    font-size: 12.5px; letter-spacing: .08em; color: rgba(255,241,220,.45);
+  }
+  footer > :first-child { justify-self: start; }
+  footer > :last-child { justify-self: end; }
+  footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: color .25s ease; }
+  footer a:hover { color: var(--cream); }
+  footer svg { width: 14px; height: 14px; }
+
+  /* reveal-on-enter base states are set from JS only, so no-JS/reduced-motion stays readable */
+
+  @media (max-width: 760px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-photo { max-width: 420px; }
+    .cards { grid-template-columns: 1fr; }
+    .phrase-wrap { padding-bottom: 18vh; }
+    footer { grid-template-columns: 1fr; gap: 8px; text-align: center; justify-items: center; }
+    footer > :first-child, footer > :last-child { justify-self: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-book::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <a class="wordmark" href="#">DJ ADRIÁN</a>
+  <nav class="nav-right">
+  <a class="nav-link nav-text" href="#about" data-scroll>About</a>
+  <a class="nav-link nav-text" href="#sets" data-scroll>Listen</a>
+  <a class="nav-link" href="tel:+13050000000" aria-label="Call DJ Adrián">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z"/></svg>
+    <span class="call-label">Call</span>
+  </a>
+  <a class="btn-book" href="https://wa.me/13050000000?text=Hola!%20Quiero%20reservar%20a%20DJ%20Adri%C3%A1n" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 7 2.9 9.83 9.83 0 0 1 2.89 7c0 5.45-4.44 9.88-9.9 9.88M20.47 3.55A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.33.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.89-5.33 11.89-11.88 0-3.18-1.24-6.16-3.47-8.4"/></svg>
+    <span>WhatsApp</span>
+  </a>
+  </nav>
+</header>
+
+<main>
+  <div class="film" id="film">
+
+    <section class="chapter" id="ch1" aria-label="DJ Adrián, DJ for any party">
+      <div class="shot" id="shot1" role="img" aria-label="Miami golden hour over the water"></div>
+      <div class="tint"></div>
+      <div class="opener-content" id="openerContent">
+        <h1 class="opener-name" id="openerName">DJ ADRI&Aacute;N</h1>
+        <p class="opener-sub">Any Sound &middot; Any City &middot; EN/ES</p>
+        <p class="opener-line">Sunset rooftops, house parties, private events. El ritmo se adapta a tu fiesta.</p>
+      </div>
+    </section>
+
+    <div class="gap"></div>
+
+    <section class="chapter" id="ch2" aria-label="The party begins">
+      <div class="shot" id="shot2" role="img" aria-label="Rooftop crowd at sunset"></div>
+      <div class="tint"></div>
+      <div class="phrase-wrap">
+        <p class="slate">The party begins</p>
+        <h2 class="phrase es" data-split>El ritmo empieza</h2>
+      </div>
+    </section>
+
+    <div class="gap"></div>
+
+    <section class="chapter" id="ch3" aria-label="The craft">
+      <div class="shot" id="shot3" role="img" aria-label="Hands on the DJ mixer at dusk"></div>
+      <div class="tint"></div>
+      <div class="phrase-wrap">
+        <p class="slate">The craft</p>
+        <h2 class="phrase" data-split>Reads the crowd</h2>
+      </div>
+    </section>
+
+    <div class="gap"></div>
+
+    <section class="chapter" id="ch4" aria-label="Peak of the night">
+      <div class="shot" id="shot4" role="img" aria-label="Night crowd, hands in the air"></div>
+      <div class="tint"></div>
+      <div class="phrase-wrap">
+        <p class="slate">Peak of the night</p>
+        <h2 class="phrase es" data-split>La noche es tuya</h2>
+      </div>
+    </section>
+
+    <div class="gap gap-last"></div>
+  </div>
+
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-photo" data-reveal><img src="assets/img/about.jpg" alt="Palm trees against the Miami dusk sky" loading="lazy" id="aboutImg"></div>
+      <div>
+        <p class="section-label" data-reveal>Quién es</p>
+        <h2 class="about-title" data-reveal>Wherever the party is, <em>Adrián</em> is the soundtrack.</h2>
+        <p class="about-text" data-reveal>
+          Adrián is a DJ based in Miami, ready to play <strong>anywhere</strong>.
+          He plays house parties, private events, and <strong>sunset sets</strong> that ride the
+          golden hour into the night. Any genre, any crowd: English or Spanish,
+          <strong>la fiesta es igual</strong>. He reads the room and plays what it needs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sets" id="sets">
+    <div class="sets-inner">
+      <p class="section-label" data-reveal>The sound</p>
+      <h2 class="sets-head" data-reveal>What he plays, <em>y dónde suena.</em></h2>
+      <div class="cards">
+        <div class="card" data-reveal>          <h3>Any Genre</h3>
+          <p>House, afro house, reggaetón, hip-hop, throwbacks: whatever moves your crowd, he plays it.</p>
+          <span class="tag">Tu música</span>
+        </div>
+        <div class="card" data-reveal>          <h3>Sunset &amp; Day Mixes</h3>
+          <p>Golden-hour music: deep, easy, and warm. Seven in the evening, in music form.</p>
+          <span class="tag">Para la tarde</span>
+        </div>
+        <div class="card" data-reveal>          <h3>House Parties &amp; Private Events</h3>
+          <p>Your place, your people, wherever it is. A set shaped to the room, in English o en español.</p>
+          <span class="tag">Tu fiesta</span>
+        </div>
+      </div>
+      <a class="watch-set" data-reveal href="https://www.youtube.com/watch?v=uynCeLheCPc" target="_blank" rel="noopener">
+        <span class="watch-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-text">
+          <span class="watch-title">Watch him play</span>
+          <span class="watch-sub">Un set en vivo &middot; YouTube</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <div class="endcap">
+  <div class="finale-bg" aria-hidden="true"></div>
+  <section class="finale" id="finale">
+    <p class="section-label" data-reveal>La gran final</p>
+    <h2 class="finale-head" data-reveal>&iquest;Hacemos una fiesta?</h2>
+    <p class="finale-sub" data-reveal>One message and it&rsquo;s on. Let&rsquo;s throw a party.</p>
+    <a class="btn-book btn-finale" data-reveal href="https://wa.me/13050000000?text=Hola!%20Quiero%20reservar%20a%20DJ%20Adri%C3%A1n" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 7 2.9 9.83 9.83 0 0 1 2.89 7c0 5.45-4.44 9.88-9.9 9.88M20.47 3.55A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.33.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.89-5.33 11.89-11.88 0-3.18-1.24-6.16-3.47-8.4"/></svg>
+    <span>Send a WhatsApp</span>
+    </a>
+    <p class="finale-alt" data-reveal>O por correo: <a href="mailto:bookings@djadrian.com">bookings@djadrian.com</a></p>
+  </section>
+
+  <footer>
+  <span>DJ ADRIÁN &middot; Miami &amp; beyond</span>
+  <a href="mailto:bookings@djadrian.com">bookings@djadrian.com</a>
+  <a href="https://wa.me/13050000000?text=Hola!%20Quiero%20reservar%20a%20DJ%20Adri%C3%A1n" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 7 2.9 9.83 9.83 0 0 1 2.89 7c0 5.45-4.44 9.88-9.9 9.88M20.47 3.55A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.33.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.89-5.33 11.89-11.88 0-3.18-1.24-6.16-3.47-8.4"/></svg>
+    WhatsApp
+  </a>
+  </footer>
+  </div>
+</main>
+
+<a class="btn-book fab" id="fab" href="https://wa.me/13050000000?text=Hola!%20Quiero%20reservar%20a%20DJ%20Adri%C3%A1n" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.1 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 7 2.9 9.83 9.83 0 0 1 2.89 7c0 5.45-4.44 9.88-9.9 9.88M20.47 3.55A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.33.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.89-5.33 11.89-11.88 0-3.18-1.24-6.16-3.47-8.4"/></svg>
+  <span>WhatsApp</span>
+</a>
+
+<script src="assets/js/gsap.min.js"></script>
+<script src="assets/js/ScrollTrigger.min.js"></script>
+<script src="assets/js/lenis.min.js"></script>
+<script>
+(function () {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const params = new URLSearchParams(location.search);
+  const jump = params.has('jump') ? parseFloat(params.get('jump')) : null;
+
+  function setReady() {
+    requestAnimationFrame(() => requestAnimationFrame(() => { window.__ready = true; }));
+  }
+
+  if (reduced) {
+    // Motion off: page is fully readable as-is.
+    document.fonts.ready.then(setReady);
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+
+  // floating WhatsApp bubble: on after the opener, off once the endcap
+  // (big WhatsApp button + footer) is coming into view
+  const fab = document.getElementById('fab');
+  const endcap = document.querySelector('.endcap');
+  function updateFab(scrollY) {
+    const pastOpener = scrollY > innerHeight * 0.9;
+    const nearEnd = endcap.getBoundingClientRect().top < innerHeight * 0.85;
+    fab.classList.toggle('on', pastOpener && !nearEnd);
+  }
+  lenis.on('scroll', e => updateFab(e.scroll));
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // split opener name into chars
+  const nameEl = document.getElementById('openerName');
+  nameEl.innerHTML = nameEl.textContent.trim().split('').map(c =>
+    c === ' ' ? '<span class="ch">&nbsp;</span>' : `<span class="ch">${c}</span>`).join('');
+
+  // split phrases into masked words
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = el.textContent.trim().split(/\s+/).map(w =>
+      `<span class="w"><span>${w}</span></span>`).join(' ');
+  });
+
+  // ---- film scrub ----
+  const chapters = [1, 2, 3, 4].map(n => ({
+    sec: document.getElementById('ch' + n),
+    shot: document.getElementById('shot' + n)
+  }));
+
+  // ch1: slow push-in across its whole dwell, content drifts up as ch2 arrives
+  gsap.fromTo(chapters[0].shot, { scale: 1 }, {
+    scale: 1.14, ease: 'none',
+    scrollTrigger: { trigger: '#film', start: 'top top', end: '+=170%', scrub: 0.5 }
+  });
+  gsap.to('#openerContent', {
+    yPercent: -18, opacity: 0, ease: 'none',
+    scrollTrigger: { trigger: '#ch2', start: 'top bottom', end: 'top 25%', scrub: 0.5 }
+  });
+
+  // ch2-4: window-parallax on the way in, then a slow settle-zoom while stuck
+  chapters.slice(1).forEach(({ sec, shot }) => {
+    gsap.fromTo(shot, { yPercent: -13, scale: 1.16 }, {
+      yPercent: 0, scale: 1.16, ease: 'none', immediateRender: false,
+      scrollTrigger: { trigger: sec, start: 'top bottom', end: 'top top', scrub: 0.5 }
+    });
+    gsap.fromTo(shot, { scale: 1.16 }, {
+      scale: 1.02, ease: 'none', immediateRender: false,
+      scrollTrigger: { trigger: sec, start: 'top top', end: '+=130%', scrub: 0.5 }
+    });
+    const words = sec.querySelectorAll('.phrase .w > span');
+    gsap.fromTo(words, { yPercent: 115 }, {
+      yPercent: 0, stagger: 0.06, ease: 'none', immediateRender: false,
+      scrollTrigger: { trigger: sec, start: 'top 55%', end: 'top 4%', scrub: 0.5 }
+    });
+    gsap.fromTo(sec.querySelector('.slate'), { opacity: 0 }, {
+      opacity: 1, ease: 'none', immediateRender: false,
+      scrollTrigger: { trigger: sec, start: 'top 30%', end: 'top top', scrub: 0.5 }
+    });
+  });
+
+  // ---- after-film reveals (created after all film triggers) ----
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    gsap.fromTo(el, { y: 44, opacity: 0 }, {
+      y: 0, opacity: 1, duration: 1.05, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+    });
+  });
+  gsap.fromTo('#aboutImg', { scale: 1.15 }, {
+    scale: 1, ease: 'none', immediateRender: false,
+    scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: 0.5 }
+  });
+
+  // ---- nav: smooth-scroll anchors through Lenis ----
+  document.querySelectorAll('[data-scroll]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      lenis.scrollTo(a.getAttribute('href'));
+    });
+  });
+
+
+  // ---- intro ----
+  function playIntro() {
+    gsap.timeline()
+      .fromTo('#openerName .ch', { yPercent: 120 }, {
+        yPercent: 0, duration: 1.15, stagger: 0.055, ease: 'power4.out'
+      }, 0.15)
+      .fromTo('.opener-sub', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.8)
+      .fromTo('.opener-line', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.95)
+      .fromTo('#topbar',   { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power2.out' }, 1.05);
+  }
+
+  window.addEventListener('load', () => {
+    ScrollTrigger.refresh();
+    if (jump !== null) {
+      // dev contract: land pre-scrolled with everything settled, skip the intro
+      gsap.set(['#openerName .ch', '.opener-sub', '.opener-line', '#topbar'], { clearProps: 'opacity,transform' });
+      lenis.scrollTo(jump, { immediate: true, force: true });
+      updateFab(jump);
+      ScrollTrigger.update();
+      setReady();
+    } else {
+      playIntro();
+      setReady();
+    }
+  });
+})();
+</script>
+<script>
+/* Grainient finale backdrop — React Bits shader verbatim from the component
+   library (grainient.html), drawn on a raw WebGL2 quad so no Three.js/CDN
+   is needed. Palette trick per Stew: color1 + color3 = the finale bg
+   (#0D0A1B), color2 = coral, so only a soft warm drift shows. */
+(function () {
+  var host = document.querySelector('.finale-bg');
+  if (!host) return;
+  var canvas = document.createElement('canvas');
+  var gl = canvas.getContext('webgl2', { alpha: false, antialias: true });
+  if (!gl) return; /* solid --deep fallback stays */
+
+  function hex3(hex) { var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return m ? [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255] : [1, 1, 1]; }
+  var opts = { c1: hex3('#0D0A1B'), c2: hex3('#75301F'), c3: hex3('#0D0A1B'),
+    timeSpeed: 0.25, warpStrength: 1, contrast: 1.1, zoom: 0.9, grain: 0.1 };
+
+  var vert = '#version 300 es\nin vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}';
+  var frag = '#version 300 es\nprecision highp float;\n' +
+'uniform vec2 iResolution; uniform float iTime; uniform float uTimeSpeed; uniform float uColorBalance; uniform float uWarpStrength; uniform float uWarpFrequency; uniform float uWarpSpeed; uniform float uWarpAmplitude; uniform float uBlendAngle; uniform float uBlendSoftness; uniform float uRotationAmount; uniform float uNoiseScale; uniform float uGrainAmount; uniform float uGrainScale; uniform float uGrainAnimated; uniform float uContrast; uniform float uGamma; uniform float uSaturation; uniform vec2 uCenterOffset; uniform float uZoom; uniform vec3 uColor1; uniform vec3 uColor2; uniform vec3 uColor3;\n' +
+'out vec4 fragColor;\n' +
+'#define S(a,b,t) smoothstep(a,b,t)\n' +
+'mat2 Rot(float a){ float s=sin(a),c=cos(a); return mat2(c,-s,s,c); }\n' +
+'vec2 hash(vec2 p){ p=vec2(dot(p,vec2(2127.1,81.17)),dot(p,vec2(1269.5,283.37))); return fract(sin(p)*43758.5453); }\n' +
+'float noise(vec2 p){ vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f); float n=mix(mix(dot(-1.0+2.0*hash(i+vec2(0.0,0.0)),f-vec2(0.0,0.0)),dot(-1.0+2.0*hash(i+vec2(1.0,0.0)),f-vec2(1.0,0.0)),u.x),mix(dot(-1.0+2.0*hash(i+vec2(0.0,1.0)),f-vec2(0.0,1.0)),dot(-1.0+2.0*hash(i+vec2(1.0,1.0)),f-vec2(1.0,1.0)),u.x),u.y); return 0.5+0.5*n; }\n' +
+'void mainImage(out vec4 o,vec2 C){ float t=iTime*uTimeSpeed; vec2 uv=C/iResolution.xy; float ratio=iResolution.x/iResolution.y; vec2 tuv=uv-0.5+uCenterOffset; tuv/=max(uZoom,0.001);\n' +
+' float degree=noise(vec2(t*0.1,tuv.x*tuv.y)*uNoiseScale); tuv.y*=1.0/ratio; tuv*=Rot(radians((degree-0.5)*uRotationAmount+180.0)); tuv.y*=ratio;\n' +
+' float frequency=uWarpFrequency; float ws=max(uWarpStrength,0.001); float amplitude=uWarpAmplitude/ws; float warpTime=t*uWarpSpeed; tuv.x+=sin(tuv.y*frequency+warpTime)/amplitude; tuv.y+=sin(tuv.x*(frequency*1.5)+warpTime)/(amplitude*0.5);\n' +
+' vec3 colLav=uColor1; vec3 colOrg=uColor2; vec3 colDark=uColor3; float b=uColorBalance; float s=max(uBlendSoftness,0.0); mat2 blendRot=Rot(radians(uBlendAngle)); float blendX=(tuv*blendRot).x; float edge0=-0.3-b-s; float edge1=0.2-b+s; float v0=0.5-b+s; float v1=-0.3-b-s;\n' +
+' vec3 layer1=mix(colDark,colOrg,S(edge0,edge1,blendX)); vec3 layer2=mix(colOrg,colLav,S(edge0,edge1,blendX)); vec3 col=mix(layer1,layer2,S(v0,v1,tuv.y));\n' +
+' vec2 grainUv=uv*max(uGrainScale,0.001); if(uGrainAnimated>0.5){grainUv+=vec2(iTime*0.05);} float grain=fract(sin(dot(grainUv,vec2(12.9898,78.233)))*43758.5453); col+=(grain-0.5)*uGrainAmount;\n' +
+' col=(col-0.5)*uContrast+0.5; float luma=dot(col,vec3(0.2126,0.7152,0.0722)); col=mix(vec3(luma),col,uSaturation); col=pow(max(col,0.0),vec3(1.0/max(uGamma,0.001))); col=clamp(col,0.0,1.0); o=vec4(col,1.0); }\n' +
+'void main(){ vec4 o=vec4(0.0); mainImage(o,gl_FragCoord.xy); fragColor=o; }';
+
+  function compile(type, src) {
+    var s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  }
+  var vs = compile(gl.VERTEX_SHADER, vert);
+  var fs = compile(gl.FRAGMENT_SHADER, frag);
+  if (!vs || !fs) return;
+  var prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+  gl.useProgram(prog);
+
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  var posLoc = gl.getAttribLocation(prog, 'position');
+  gl.enableVertexAttribArray(posLoc);
+  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+  var U = function (n) { return gl.getUniformLocation(prog, n); };
+  gl.uniform1f(U('uTimeSpeed'), opts.timeSpeed);
+  gl.uniform1f(U('uColorBalance'), 0);
+  gl.uniform1f(U('uWarpStrength'), opts.warpStrength);
+  gl.uniform1f(U('uWarpFrequency'), 5);
+  gl.uniform1f(U('uWarpSpeed'), 2);
+  gl.uniform1f(U('uWarpAmplitude'), 50);
+  gl.uniform1f(U('uBlendAngle'), 0);
+  gl.uniform1f(U('uBlendSoftness'), 0.05);
+  gl.uniform1f(U('uRotationAmount'), 500);
+  gl.uniform1f(U('uNoiseScale'), 2);
+  gl.uniform1f(U('uGrainAmount'), opts.grain);
+  gl.uniform1f(U('uGrainScale'), 2);
+  gl.uniform1f(U('uGrainAnimated'), 0);
+  gl.uniform1f(U('uContrast'), opts.contrast);
+  gl.uniform1f(U('uGamma'), 1);
+  gl.uniform1f(U('uSaturation'), 1);
+  gl.uniform2f(U('uCenterOffset'), 0, 0);
+  gl.uniform1f(U('uZoom'), opts.zoom);
+  gl.uniform3f(U('uColor1'), opts.c1[0], opts.c1[1], opts.c1[2]);
+  gl.uniform3f(U('uColor2'), opts.c2[0], opts.c2[1], opts.c2[2]);
+  gl.uniform3f(U('uColor3'), opts.c3[0], opts.c3[1], opts.c3[2]);
+
+  host.appendChild(canvas);
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function size() {
+    var r = host.getBoundingClientRect();
+    var w = Math.max(1, Math.round(r.width * dpr));
+    var h = Math.max(1, Math.round(r.height * dpr));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    gl.viewport(0, 0, w, h);
+    gl.uniform2f(U('iResolution'), w, h);
+  }
+  size();
+  if ('ResizeObserver' in window) new ResizeObserver(size).observe(host);
+
+  function drawAt(t) {
+    gl.uniform1f(U('iTime'), t);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  /* reduced motion: one still frame, no animation loop */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { drawAt(8); return; }
+
+  /* only animate while the finale is on screen */
+  var running = true;
+  var raf = null;
+  function loop(t) {
+    raf = null;
+    drawAt(t * 0.001);
+    if (running) raf = requestAnimationFrame(loop);
+  }
+  function start() { if (!raf) raf = requestAnimationFrame(loop); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      running = entries[0].isIntersecting;
+      if (running) start();
+    }).observe(host);
+  }
+  start();
+})();
+</script>
+</body>
+</html>
