@@ -167,7 +167,6 @@
     background-size: cover; background-position: center;
     will-change: transform;
   }
-  #shot1 { background-image: url('assets/img/ch1.jpg'); }
   #shot2 { background-image: url('assets/img/ch2.jpg'); }
   #shot3 { background-image: url('assets/img/ch3.jpg'); }
   #shot4 { background-image: url('assets/img/ch4.jpg'); }
@@ -177,47 +176,54 @@
   }
   .gap { height: 70vh; }
   .gap-last { height: 55vh; }
-  #ch1 { z-index: 1; } #ch2 { z-index: 2; } #ch3 { z-index: 3; } #ch4 { z-index: 4; }
+  #ch2 { z-index: 2; } #ch3 { z-index: 3; } #ch4 { z-index: 4; }
 
-  /* chapter 1: the opener */
-  /* layout 1c — full-bleed title, split caption row (Stew-approved 2026-07-26) */
-  .opener-content {
-    position: absolute; inset: 0; z-index: 2;
+  /* the opener: standalone hero (layout 1a from design_handoff_hero_1a,
+     ported from the practice copy — capped title, NOT the 1c fit-to-width) */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    background: #000;
+    overflow: hidden;
     display: flex; flex-direction: column;
-    padding: 109px 0 0;
+    line-height: normal;          /* neutralize body line-height:1.6 bleed */
+    -webkit-font-smoothing: auto;
+  }
+  .hero-bg {                      /* photo on its own layer so GSAP can zoom it */
+    position: absolute; inset: 0; z-index: 0;
+    background: url('assets/img/ch1.jpg') center / cover no-repeat;
+    will-change: transform;
+  }
+  .hero::before {                 /* same tint as the film chapters */
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(13,10,27,.42), rgba(13,10,27,0) 45%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 28px; text-align: center;
+    padding: 0 24px 8vh;          /* slight upward optical shift */
     will-change: transform, opacity;
   }
-  .title-zone { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; }
-  .hero-caption {
-    display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
-    padding: 0 48px 40px; width: 100%;
-  }
-  @media (max-width: 640px) {
-    .opener-content { padding-top: 85px; }
-    .hero-caption { flex-direction: column; align-items: flex-start; gap: 14px; padding: 0 20px 28px; }
-    .opener-line { text-align: left !important; }
-  }
-  .opener-name {
+  .hero-title {
     font-family: 'Inter', system-ui, sans-serif; font-weight: 900;
-    /* base size only — the fit-to-width script (ported from the 1c handoff)
-       rescales the title to span 92% of the viewport at every size.
-       Never hand-tune a vw value for this. */
-    font-size: 100px; white-space: nowrap;
-    visibility: hidden; /* shown by the fit script (prevents flash) */
-    line-height: .85; letter-spacing: -.03em;
+    font-size: clamp(72px, 16vw, 300px);
+    line-height: 0.9; letter-spacing: -0.02em;
     color: var(--cream);
     text-shadow: 0 4px 60px rgba(13,10,27,.45);
   }
-  .opener-name .ch { display: inline-block; will-change: transform; }
-  .opener-sub {
-    font-size: clamp(12px, 1.1vw, 18px); font-weight: 400; line-height: 1.2;
-    letter-spacing: .45em; white-space: nowrap; text-transform: uppercase;
+  .hero-tagline {
+    font-size: clamp(12px, 1.2vw, 20px); font-weight: 400;
+    letter-spacing: .45em; margin-right: -.45em; /* re-center: offsets trailing tracking */
+    text-transform: uppercase;
     color: rgba(255,241,220,.9);
     text-shadow: 0 2px 20px rgba(13,10,27,.6);
   }
-  .opener-line {
-    max-width: 26em; text-align: right;
-    font-size: clamp(14px, 1.2vw, 20px); line-height: 1.5;
+  .hero-sub {
+    font-size: clamp(15px, 1.4vw, 24px); line-height: 1.5;
+    max-width: 34em;
     color: rgba(255,241,220,.75);
     text-shadow: 0 2px 18px rgba(13,10,27,.6);
     text-wrap: pretty;
@@ -478,21 +484,16 @@
 </header>
 
 <main>
+  <section class="hero" aria-label="A-DRN, DJ for any party">
+    <div class="hero-bg" id="heroBg" role="img" aria-label="Miami golden hour over the water"></div>
+    <div class="hero-content" id="heroContent">
+      <h1 class="hero-title">A-DRN</h1>
+      <p class="hero-tagline">Any Sound &middot; Any City &middot; EN/ES</p>
+      <p class="hero-sub">Sunset rooftops, house parties, private events. El ritmo se adapta a tu fiesta.</p>
+    </div>
+  </section>
+
   <div class="film" id="film">
-
-    <section class="chapter" id="ch1" aria-label="A-DRN, DJ for any party">
-      <div class="shot" id="shot1" role="img" aria-label="Miami golden hour over the water"></div>
-      <div class="tint"></div>
-      <div class="opener-content" id="openerContent">
-        <div class="title-zone"><h1 class="opener-name" id="openerName">A-DRN</h1></div>
-        <div class="hero-caption">
-          <p class="opener-sub">Any Sound &middot; Any City &middot; EN/ES</p>
-          <p class="opener-line">Sunset rooftops, house parties, private events. El ritmo se adapta a tu fiesta.</p>
-        </div>
-      </div>
-    </section>
-
-    <div class="gap"></div>
 
     <section class="chapter" id="ch2" aria-label="The party begins">
       <div class="shot" id="shot2" role="img" aria-label="Rooftop crowd at sunset"></div>
@@ -606,35 +607,6 @@
   <span>WhatsApp</span>
 </a>
 
-<script>
-/* Fit-to-width (ported from the 1c wireframe handoff): scales the title so
-   it spans 92% of the viewport width in whatever font is applied. Runs for
-   everyone — including reduced-motion and ?jump — since it's layout, not
-   motion. Refits only when the WIDTH changes: iOS bar show/hide fires
-   resize with a height change only, and refitting there would jitter. */
-(function () {
-  var TARGET = 0.92;
-  var el = document.getElementById('openerName');
-  var lastW = 0;
-  function fit() {
-    if (window.innerWidth === lastW) return;
-    lastW = window.innerWidth;
-    el.style.fontSize = '100px';
-    var w = el.getBoundingClientRect().width;
-    el.style.fontSize = (100 * (window.innerWidth * TARGET) / w) + 'px';
-    el.style.visibility = 'visible';
-  }
-  fit();
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () { lastW = 0; fit(); });
-  }
-  window.addEventListener('resize', fit);
-})();
-</script>
-<noscript><style>
-  /* no-JS fallback: ~92vw in Inter 900 at -0.03em (fit script can't run) */
-  .opener-name { visibility: visible; font-size: 28vw; }
-</style></noscript>
 <script src="assets/js/gsap.min.js"></script>
 <script src="assets/js/ScrollTrigger.min.js"></script>
 <script src="assets/js/lenis.min.js"></script>
@@ -674,16 +646,10 @@
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  // split opener name into chars
-  const nameEl = document.getElementById('openerName');
-  nameEl.innerHTML = nameEl.textContent.trim().split('').map(c =>
-    c === ' ' ? '<span class="ch">&nbsp;</span>' : `<span class="ch">${c}</span>`).join('');
-
   if (jump === null) {
     // pre-hide the intro cast so nothing flashes while the loader fades away,
     // and hold scroll until the loader hands off
-    gsap.set('#openerName .ch', { yPercent: 120 });
-    gsap.set(['.opener-sub', '.opener-line', '#topbar'], { opacity: 0 });
+    gsap.set(['.hero-title', '.hero-tagline', '.hero-sub', '#topbar'], { opacity: 0 });
     lenis.stop();
     (window.__loaderDone || Promise.resolve()).then(() => lenis.start());
   }
@@ -695,23 +661,19 @@
   });
 
   // ---- film scrub ----
-  const chapters = [1, 2, 3, 4].map(n => ({
+  // hero: same settle-zoom as the chapters — photo eases out slightly as you scroll away
+  gsap.fromTo('#heroBg', { scale: 1.12 }, {
+    scale: 1.02, ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.5 }
+  });
+
+  const chapters = [2, 3, 4].map(n => ({
     sec: document.getElementById('ch' + n),
     shot: document.getElementById('shot' + n)
   }));
 
-  // ch1: slow push-in across its whole dwell, content drifts up as ch2 arrives
-  gsap.fromTo(chapters[0].shot, { scale: 1 }, {
-    scale: 1.14, ease: 'none',
-    scrollTrigger: { trigger: '#film', start: 'top top', end: '+=170%', scrub: 0.5 }
-  });
-  gsap.to('#openerContent', {
-    yPercent: -18, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '#ch2', start: 'top bottom', end: 'top 25%', scrub: 0.5 }
-  });
-
   // ch2-4: window-parallax on the way in, then a slow settle-zoom while stuck
-  chapters.slice(1).forEach(({ sec, shot }) => {
+  chapters.forEach(({ sec, shot }) => {
     gsap.fromTo(shot, { yPercent: -13, scale: 1.16 }, {
       yPercent: 0, scale: 1.16, ease: 'none', immediateRender: false,
       scrollTrigger: { trigger: sec, start: 'top bottom', end: 'top top', scrub: 0.5 }
@@ -767,11 +729,11 @@
   // ---- intro ----
   function playIntro() {
     gsap.timeline()
-      .fromTo('#openerName .ch', { yPercent: 120 }, {
-        yPercent: 0, duration: 1.15, stagger: 0.055, ease: 'power4.out'
+      .fromTo('.hero-title', { opacity: 0, y: 36 }, {
+        opacity: 1, y: 0, duration: 1.15, ease: 'power4.out'
       }, 0.15)
-      .fromTo('.opener-sub', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.8)
-      .fromTo('.opener-line', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.95)
+      .fromTo('.hero-tagline', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.8)
+      .fromTo('.hero-sub', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.95)
       .fromTo('#topbar',   { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power2.out' }, 1.05);
   }
 
@@ -779,7 +741,7 @@
     ScrollTrigger.refresh();
     if (jump !== null) {
       // dev contract: land pre-scrolled with everything settled, skip the intro
-      gsap.set(['#openerName .ch', '.opener-sub', '.opener-line', '#topbar'], { clearProps: 'opacity,transform' });
+      gsap.set(['.hero-title', '.hero-tagline', '.hero-sub', '#topbar'], { clearProps: 'opacity,transform' });
       lenis.scrollTo(jump, { immediate: true, force: true });
       updateFab(jump);
       ScrollTrigger.update();
