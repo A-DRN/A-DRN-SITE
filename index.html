@@ -25,15 +25,6 @@
     src: url('assets/fonts/instrument-sans.woff2') format('woff2');
     font-weight: 400 700; font-style: normal; font-display: swap;
   }
-  /* hero title only — Stew's wireframe-fidelity call 2026-07-26: the 1c
-     wireframe renders in SF Pro Black; Inter 900 is the closest
-     self-hostable match (10.8% glyph diff vs 31% for Archivo Black) */
-  @font-face {
-    font-family: 'Inter';
-    src: url('assets/fonts/inter-900.woff2') format('woff2');
-    font-weight: 900; font-style: normal; font-display: swap;
-  }
-
   :root {
     --cream: #FFF1DC;
     --gold: #F6B95B;
@@ -187,6 +178,7 @@
     background: #000;
     overflow: hidden;
     display: flex; flex-direction: column;
+    font-family: system-ui, sans-serif; /* the 1a render IS the spec — SF on Apple */
     line-height: normal;          /* neutralize body line-height:1.6 bleed */
     -webkit-font-smoothing: auto;
   }
@@ -204,28 +196,28 @@
     flex: 1;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 28px; text-align: center;
-    padding: 0 24px 8vh;          /* slight upward optical shift */
+    /* top = the absolute topbar's height, so centering matches the practice
+       copy where the nav is in flow; bottom 8vh = slight upward optical shift */
+    padding: 109px 24px 8vh;
     will-change: transform, opacity;
   }
+  @media (max-width: 640px) { .hero-content { padding-top: 85px; } }
   .hero-title {
-    font-family: 'Inter', system-ui, sans-serif; font-weight: 900;
+    font-weight: 900;
     font-size: clamp(72px, 16vw, 300px);
     line-height: 0.9; letter-spacing: -0.02em;
     color: var(--cream);
-    text-shadow: 0 4px 60px rgba(13,10,27,.45);
   }
   .hero-tagline {
     font-size: clamp(12px, 1.2vw, 20px); font-weight: 400;
     letter-spacing: .45em; margin-right: -.45em; /* re-center: offsets trailing tracking */
     text-transform: uppercase;
     color: rgba(255,241,220,.9);
-    text-shadow: 0 2px 20px rgba(13,10,27,.6);
   }
   .hero-sub {
     font-size: clamp(15px, 1.4vw, 24px); line-height: 1.5;
     max-width: 34em;
     color: rgba(255,241,220,.75);
-    text-shadow: 0 2px 18px rgba(13,10,27,.6);
     text-wrap: pretty;
   }
 
@@ -427,7 +419,7 @@
 
   var assets = ['assets/img/ch1.jpg', 'assets/img/ch2.jpg', 'assets/img/ch3.jpg',
                 'assets/img/ch4.jpg', 'assets/img/about.jpg'];
-  var total = assets.length + 3;
+  var total = assets.length + 2;
   var loaded = 0;
   function tick() { loaded++; }
   assets.forEach(function (src) {
@@ -438,8 +430,7 @@
   if (document.fonts && document.fonts.load) {
     document.fonts.load('800 1em "Big Shoulders"').then(tick, tick);
     document.fonts.load('400 1em "Instrument Sans"').then(tick, tick);
-    document.fonts.load('900 1em "Inter"').then(tick, tick);
-  } else { loaded += 3; }
+  } else { loaded += 2; }
 
   var start = performance.now();
   var minTime = 1000; /* cached loads still get a visible 0-to-100 sweep */
