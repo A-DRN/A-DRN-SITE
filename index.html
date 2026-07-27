@@ -237,7 +237,10 @@
     letter-spacing: .01em; color: var(--cream);
     text-shadow: 0 2px 34px rgba(13,10,27,.4);
   }
-  .phrase .w { display: inline-block; overflow: hidden; vertical-align: top; }
+  /* pad extends each word's clip window below the line so descenders (g/y/q)
+     aren't cut; negative margin cancels the layout shift. The reveal offset
+     in JS must clear the taller window — keep it in sync (135%). */
+  .phrase .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .18em; margin-bottom: -.18em; }
   .phrase .w > span { display: inline-block; will-change: transform; }
 
   /* ---------- after the film ---------- */
@@ -683,7 +686,7 @@
       scrollTrigger: { trigger: sec, start: 'top top', end: '+=130%', scrub: 0.5 }
     });
     const words = sec.querySelectorAll('.phrase .w > span');
-    gsap.fromTo(words, { yPercent: 115 }, {
+    gsap.fromTo(words, { yPercent: 135 }, {
       yPercent: 0, stagger: 0.06, ease: 'none', immediateRender: false,
       scrollTrigger: { trigger: sec, start: 'top 55%', end: 'top 4%', scrub: 0.5 }
     });
