@@ -99,9 +99,10 @@
   }
   .fab.on { opacity: 1; visibility: visible; transform: translateY(0); }
   .fab.on:hover { transform: translateY(0) scale(1.045); }
+  /* same face as the hero title (system-ui heavy) so the corner matches the page */
   .wordmark {
-    font-family: 'Big Shoulders', sans-serif; font-weight: 800; font-size: 18px;
-    letter-spacing: .15em; text-decoration: none; color: var(--cream);
+    font-family: system-ui, sans-serif; font-weight: 900; font-size: 19px;
+    letter-spacing: -.01em; text-decoration: none; color: var(--cream);
     text-shadow: 0 1px 12px rgba(13,10,27,.5);
   }
   .nav-right { display: flex; align-items: center; gap: 36px; }
