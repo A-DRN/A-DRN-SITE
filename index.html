@@ -171,10 +171,10 @@
 
   /* the opener: standalone hero (layout 1a from design_handoff_hero_1a,
      ported from the practice copy — capped title, NOT the 1c fit-to-width) */
+  /* pinned like the film chapters: holds still while ch2 slides over it */
   .hero {
-    position: relative;
-    min-height: 100vh;
-    min-height: 100svh;
+    position: sticky; top: 0; z-index: 1;
+    height: 100vh; height: 100lvh; /* lvh, same as .chapter — see the note there */
     background: #000;
     overflow: hidden;
     display: flex; flex-direction: column;
@@ -475,16 +475,18 @@
 </header>
 
 <main>
-  <section class="hero" aria-label="A-DRN, DJ for any party">
-    <div class="hero-bg" id="heroBg" role="img" aria-label="Miami golden hour over the water"></div>
-    <div class="hero-content" id="heroContent">
-      <h1 class="hero-title">A-DRN</h1>
-      <p class="hero-tagline">Any Sound &middot; Any City &middot; EN/ES</p>
-      <p class="hero-sub">Sunset rooftops, house parties, private events. El ritmo se adapta a tu fiesta.</p>
-    </div>
-  </section>
-
   <div class="film" id="film">
+
+    <section class="hero" aria-label="A-DRN, DJ for any party">
+      <div class="hero-bg" id="heroBg" role="img" aria-label="Miami golden hour over the water"></div>
+      <div class="hero-content" id="heroContent">
+        <h1 class="hero-title">A-DRN</h1>
+        <p class="hero-tagline">Any Sound &middot; Any City &middot; EN/ES</p>
+        <p class="hero-sub">Sunset rooftops, house parties, private events. El ritmo se adapta a tu fiesta.</p>
+      </div>
+    </section>
+
+    <div class="gap"></div>
 
     <section class="chapter" id="ch2" aria-label="The party begins">
       <div class="shot" id="shot2" role="img" aria-label="Rooftop crowd at sunset"></div>
@@ -652,10 +654,15 @@
   });
 
   // ---- film scrub ----
-  // hero: same settle-zoom as the chapters — photo eases out slightly as you scroll away
+  // hero: same settle-zoom as the chapters across its whole dwell,
+  // content drifts up and fades as ch2 slides over (same handoff as ch2→ch3)
   gsap.fromTo('#heroBg', { scale: 1.12 }, {
     scale: 1.02, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.5 }
+    scrollTrigger: { trigger: '#film', start: 'top top', end: '+=170%', scrub: 0.5 }
+  });
+  gsap.to('#heroContent', {
+    yPercent: -18, opacity: 0, ease: 'none',
+    scrollTrigger: { trigger: '#ch2', start: 'top bottom', end: 'top 25%', scrub: 0.5 }
   });
 
   const chapters = [2, 3, 4].map(n => ({
